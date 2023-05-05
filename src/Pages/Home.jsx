@@ -1,12 +1,10 @@
-import Nav from '../components/Nav';
 import Form from '../components/Form';
-import List from '../components/List';
+import Books from '../components/Books';
 
 export default function Home() {
   return (
     <div>
-      <Nav />
-      <List />
+      <Books />
       <Form />
     </div>
   );

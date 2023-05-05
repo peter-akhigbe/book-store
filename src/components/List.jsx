@@ -1,9 +1,6 @@
-export default function List() {
-  const books = [
-    { id: 1, title: 'Book 1', category: 'Action' },
-    { id: 2, title: 'Book 2', category: 'Romance' },
-    { id: 3, title: 'Book 3', category: 'Horror' },
-  ];
+import PropTypes from 'prop-types';
+
+export default function List({ books }) {
   return (
     <div>
       <h2>Books</h2>
@@ -19,3 +16,13 @@ export default function List() {
     </div>
   );
 }
+
+List.propTypes = {
+  books: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+};
