@@ -1,19 +1,28 @@
-import { Link } from 'react-router-dom';
+import { MdPerson } from 'react-icons/md';
 
-export default function Nav() {
+function Nav() {
+  const links = document.querySelectorAll('a');
+
+  links.forEach((link) => {
+    link.addEventListener('click', () => link.classList.add('active-link'));
+  });
+
   return (
-    <div>
-      <h1>
-        <Link to="/">BookStore CMS</Link>
-      </h1>
+    <nav className="nav">
       <ul>
-        <li>
-          <Link to="/">BOOKS</Link>
+        <li className="logo">
+          <h1>Bookstore CMS</h1>
+          <a href="/">BOOKS</a>
+          <a href="/">CATEGORIES</a>
         </li>
-        <li>
-          <Link to="categories">CATEGORIES</Link>
+        <li className="icon-container">
+          <a aria-label="icon" href="/categories">
+            <MdPerson className="icon" />
+          </a>
         </li>
       </ul>
-    </div>
+    </nav>
   );
 }
+
+export default Nav;
