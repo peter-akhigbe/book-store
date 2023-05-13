@@ -19,6 +19,7 @@ const List = () => {
             <li>{book.item_id}</li>
             <li>{book.title}</li>
             <li>{book.author}</li>
+            <li>{book.category || 'Movie'}</li>
             <button
               type="button"
               onClick={() => handleRemoveBook(book.item_id)}
