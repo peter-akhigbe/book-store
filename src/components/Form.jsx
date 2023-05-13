@@ -1,25 +1,35 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addBook } from '../redux/books/booksSlice';
+import { addBook, addBookToApi } from '../redux/books/booksSlice';
 
 const Form = () => {
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
+  const [formState, setFormState] = useState({ title: '', author: '' });
+  const { books } = useSelector((state) => state.books);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+      item_id: `item${books.length + 1}`,
+    }));
+  };
 
   const dispatch = useDispatch();
-  const books = useSelector((state) => state.books.books);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const { title, author } = formState;
     if (title.trim() !== '' && author.trim() !== '') {
-      const newBook = {
-        title,
-        author,
+      const formInput = {
         item_id: `item${books.length + 1}`,
+        title: formState.title,
+        author: formState.author,
+        category: 'Action',
       };
-      dispatch(addBook(newBook));
-      setTitle('');
-      setAuthor('');
+      dispatch(addBookToApi(formInput));
+      dispatch(addBook(formInput));
+      setFormState({ title: '', author: '' });
     }
   };
 
@@ -31,16 +41,20 @@ const Form = () => {
           type="text"
           className="title"
           placeholder="Book title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleChange}
+          name="title"
+          value={formState.title}
         />
+
         <input
           type="text"
           className="author"
           placeholder="Author"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
+          onChange={handleChange}
+          name="author"
+          value={formState.author}
         />
+
         <button type="submit" className="addBook">
           Add Book
         </button>
