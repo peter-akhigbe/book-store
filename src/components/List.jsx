@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   removeBook,
@@ -8,7 +8,7 @@ import {
 
 function List() {
   const dispatch = useDispatch();
-  const { books } = useSelector((state) => state.books);
+  const { books } = useSelector((store) => store.books);
 
   useEffect(() => {
     dispatch(fetchBooks());
@@ -38,5 +38,4 @@ function List() {
     </div>
   );
 }
-
 export default List;

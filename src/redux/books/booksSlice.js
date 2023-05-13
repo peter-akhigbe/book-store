@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_BASE_URL = 'https://us-central1-bookstore-api-e63c8.cloudfunctions.net/bookstoreApi/apps/iaUyZfZH6pe6TOHNZlwZ/books';
+const BaseUrl = 'https://us-central1-bookstore-api-e63c8.cloudfunctions.net/bookstoreApi/apps/iaUyZfZH6pe6TOHNZlwZ/books';
 
 export const addBookToApi = createAsyncThunk('books/addBookToApi', async (book) => {
-  const result = await axios.post(API_BASE_URL, book);
+  const result = await axios.post(BaseUrl, book);
   return result.data;
 });
 
 export const fetchBooks = createAsyncThunk('books/fetchBooks', async () => {
-  const response = await axios.get(API_BASE_URL);
+  const response = await axios.get(BaseUrl);
   const booksArray = Object.keys(response.data).map((key) => ({
     item_id: key,
     ...response.data[key][0],
@@ -18,7 +18,7 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async () => {
 });
 
 export const removeBookFromApi = createAsyncThunk('books/removeBookFromApi', async (bookId) => {
-  await axios.delete(`${API_BASE_URL}/${bookId}`);
+  await axios.delete(`${BaseUrl}/${bookId}`);
   return bookId;
 });
 
@@ -36,23 +36,25 @@ const bookSlice = createSlice({
       state.books.push(action.payload);
     },
     removeBook: (state, action) => {
-      state.books = state.books.filter((book) => book.item_id !== action.payload);
+      const newState = { ...state };
+      newState.books = state.books.filter((book) => book.item_id !== action.payload);
+      return newState;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchBooks.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchBooks.fulfilled, (state, action) => {
-        state.loading = false;
-        state.books = action.payload;
-      })
-      .addCase(fetchBooks.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+
+  extraReducers: {
+    [fetchBooks.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [fetchBooks.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.books = action.payload;
+    },
+    [fetchBooks.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
   },
 });
 
