@@ -1,25 +1,35 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addBook } from '../redux/books/booksSlice';
+import { addBook, addBookToApi } from '../redux/books/booksSlice';
 
 const Form = () => {
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
+  const [formState, setFormState] = useState({ title: '', author: '' });
+  const { books } = useSelector((state) => state.books);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+      item_id: `item${books.length + 1}`,
+    }));
+  };
 
   const dispatch = useDispatch();
-  const books = useSelector((state) => state.books.books);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const { title, author } = formState;
+
     if (title.trim() !== '' && author.trim() !== '') {
-      const newBook = {
-        title,
-        author,
-        item_id: `item${books.length + 1}`,
-      };
-      dispatch(addBook(newBook));
-      setTitle('');
-      setAuthor('');
+      dispatch(addBookToApi(formState))
+        .then((response) => {
+          dispatch(addBook(response));
+          setFormState({ title: '', author: '' });
+        })
+        .catch((error) => {
+          throw new Error('Error adding book to API:', error);
+        });
     }
   };
 
@@ -30,16 +40,18 @@ const Form = () => {
         <input
           type="text"
           className="title"
-          placeholder="Book title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Book Title"
+          onChange={handleChange}
+          name="title"
+          value={formState.title}
         />
         <input
           type="text"
           className="author"
           placeholder="Author"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
+          onChange={handleChange}
+          name="author"
+          value={formState.author}
         />
         <button type="submit" className="addBook">
           Add Book
