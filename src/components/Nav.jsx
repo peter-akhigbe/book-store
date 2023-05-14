@@ -1,4 +1,5 @@
 import { MdPerson } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 function Nav() {
   const links = document.querySelectorAll('a');
@@ -12,13 +13,13 @@ function Nav() {
       <ul>
         <li className="logo">
           <h1>Bookstore CMS</h1>
-          <a href="/">BOOKS</a>
-          <a href="/">CATEGORIES</a>
+          <Link to="/">BOOKS</Link>
+          <Link to="/categories">CATEGORIES</Link>
         </li>
         <li className="icon-container">
-          <a aria-label="icon" href="/categories">
+          <Link aria-label="icon" to="/">
             <MdPerson className="icon" />
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>

@@ -14,6 +14,7 @@ function List() {
   useEffect(() => {
     dispatch(fetchBooks());
   }, [dispatch]);
+
   return (
     <div className="progressWrapper">
       <ul className="bookDisplay">
@@ -25,6 +26,7 @@ function List() {
                 <li className="book-title">{book.title}</li>
                 <li className="author">{book.author}</li>
               </div>
+
               <div className="buttons">
                 <button type="button">Comments</button>
                 <button
@@ -40,10 +42,11 @@ function List() {
                 <button type="button">Edit</button>
               </div>
             </div>
+
             <div className="progress">
-              <CircularProgressbar className="circular" value={66} />
+              <CircularProgressbar className="circular" value={64} />
               <div className="progress-info">
-                <span className="percentage">66%</span>
+                <span className="percentage">64%</span>
                 <span className="completed">Completed</span>
               </div>
             </div>

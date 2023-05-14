@@ -45,6 +45,7 @@ const Form = () => {
           name="title"
           value={formState.title}
         />
+
         <input
           type="text"
           className="input"
@@ -53,6 +54,7 @@ const Form = () => {
           name="author"
           value={formState.author}
         />
+
         <button type="submit" className="addBook">
           Add Book
         </button>
